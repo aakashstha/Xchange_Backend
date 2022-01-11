@@ -57,7 +57,7 @@ router.get("/:mobileId", async (req, res, next) => {
       res.status(200).json({ mobile: result });
       return;
     }
-    res.status(404).json({ message: "No such ID exist in our course" });
+    res.status(404).json({ message: "No such ID exist in our Mobile" });
   } catch (err) {
     res.status(500).json({
       message: "Error from Mobile Get One method",
@@ -97,8 +97,13 @@ router.delete("/:mobileId", async (req, res, next) => {
   const mobileId = req.params.mobileId;
 
   try {
-    const result = await Mobile.deleteOne({ _id: mobileId }).exec();
-    res.status(200).json({ message: "Mobile Ad Deleted Successfully" });
+    const result = await Mobile.findByIdAndDelete(mobileId).exec();
+
+    if (result) {
+      res.status(200).json({ message: "Mobile Ad Deleted Successfully" });
+      return;
+    }
+    res.status(404).json({ message: "No such ID exist in our Mobile" });
   } catch (err) {
     res.status(500).json({
       message: "Error from Mobile Delete method",

@@ -8,8 +8,6 @@ const app = express();
 const adminRoutes = require("./api/routes/admin");
 const mobileRoutes = require("./api/routes/mobile");
 
-
-
 // For Database Connection
 const URI =
   "mongodb+srv://xchange:" +
@@ -20,18 +18,27 @@ mongoose.connect(URI, async (err) => {
   console.log("conncted to db");
 });
 
+// express.json() is a built express middleware that convert request body to JSON.
 app.use(express.json());
+// For logging incoming request in the Console.
 app.use(morgan("tiny"));
 
-
+// My Xchange_Backend main routes
 app.use("/admin", adminRoutes);
-app.use("/mobile", mobileRoutes);
+app.use("/mobiles", mobileRoutes);
 
+// Home route of this app
+app.get("/", (req, res, next) => {
+  res.send("Welcome fabulous people this is our main route!");
+});
 
-// app.use((req, res, next) => {
-//   res.status(200).json({
-//     message: "It works!",
-//   });
-// });
+// Custom Error Handle Response
+// Here we are using app.use() because we do not know which HTTP method user might use.
+app.use((req, res, next) => {
+  res.status(404).send({
+    status: 404,
+    error: "Not Found from app",
+  });
+});
 
 module.exports = app;
