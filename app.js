@@ -5,10 +5,10 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const app = express();
 
-const adminRoutes = require('./api/routes/admin');
+const adminRoutes = require("./api/routes/admin");
+const mobileRoutes = require("./api/routes/mobile");
 
 
-app.use(morgan("tiny"));
 
 // For Database Connection
 const URI =
@@ -21,7 +21,12 @@ mongoose.connect(URI, async (err) => {
 });
 
 app.use(express.json());
-app.use('/admin', adminRoutes);
+app.use(morgan("tiny"));
+
+
+app.use("/admin", adminRoutes);
+app.use("/mobile", mobileRoutes);
+
 
 // app.use((req, res, next) => {
 //   res.status(200).json({
