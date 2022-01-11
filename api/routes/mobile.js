@@ -1,23 +1,64 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const multer = require("multer");
+const fs = require("fs");
 
 const Mobile = require("../models/mobile");
 
+// To store any kind of files
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // null is for error
+    cb(null, "./uploads/");
+  },
+
+  filename: (req, file, cb) => {
+    // store current date-time as image name
+    cb(null, Date.now() + "_" + file.originalname);
+  },
+});
+const fileFilter = (req, file, cb) => {
+  console.log(file);
+  if (
+    file.mimetype == "image/jpg" ||
+    file.mimetype == "image/jpeg" ||
+    file.mimetype == "image/png"
+  ) {
+    // store file with this extension
+    cb(null, true);
+  }
+  {
+    // reject a file with different extension
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 5 },
+  //fileFilter: fileFilter,
+});
+
+var uploadMultiple = upload.array("image", 8);
+
 // For Posting Mobile Ad
-router.post("/", async (req, res, next) => {
+router.post("/", uploadMultiple, async (req, res, next) => {
   const mobile = new Mobile({
     _id: new mongoose.Types.ObjectId(),
     brand: req.body.brand,
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files,
   });
+  console.log(req);
 
   try {
     const result = await mobile.save();
     res.status(201).json({
       message: "Mobile Ad Created Successfully",
+      imagesArray: req.files,
     });
   } catch (err) {
     res.status(500).json({
