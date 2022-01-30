@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const fs = require("fs");
 
-const Mobile = require("../models/mobile");
+const Mobile = require("../models/mobile.model");
 
 // To store any kind of files
 const storage = multer.diskStorage({
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
   filename: (req, file, cb) => {
     // store current date-time as image name
-    cb(null, Date.now() + "_" + file.originalname);
+    cb(null, Date.now() + "_" + file.originalname.split(" ").join("_"));
   },
 });
 const fileFilter = (req, file, cb) => {
@@ -50,15 +50,15 @@ router.post("/", uploadMultiple, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
-    images: req.files,
+    images: req.files.map((file) => file.path),
   });
-  console.log(req);
+  //console.log(req);
 
   try {
     const result = await mobile.save();
     res.status(201).json({
       message: "Mobile Ad Created Successfully",
-      imagesArray: req.files,
+      imagesArray: req.files.map((file) => file.path),
     });
   } catch (err) {
     res.status(500).json({

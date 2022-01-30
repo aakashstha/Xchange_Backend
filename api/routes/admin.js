@@ -9,7 +9,7 @@ const Admin = require("../models/admin");
 
 // For Posting Admin SignUp Data
 router.post("/signup", async (req, res, next) => {
-  try {
+  try { 
     const result = await Admin.find({ email: req.body.email }).exec();
 
     if (result.length >= 1) {
