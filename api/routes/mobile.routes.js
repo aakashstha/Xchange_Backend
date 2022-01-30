@@ -37,7 +37,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 5 },
-  //fileFilter: fileFilter,
+  // fileFilter: fileFilter,
 });
 
 var uploadMultiple = upload.array("image", 8);

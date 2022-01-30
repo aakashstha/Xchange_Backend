@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const app = express();
 
-const adminRoutes = require("./api/routes/admin");
+const adminRoutes = require("./api/routes/admin.routes");
 const mobileRoutes = require("./api/routes/mobile.routes");
 
 // For Database Connection

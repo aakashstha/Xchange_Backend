@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const Admin = require("../models/admin");
-//const checkAuth = require("../middleware/check-auth");
+const Admin = require("../models/admin.model");
+const checkAuth = require("../middleware/check-auth");
 
 // For Posting Admin SignUp Data
 router.post("/signup", async (req, res, next) => {
-  try { 
+  try {
     const result = await Admin.find({ email: req.body.email }).exec();
 
     if (result.length >= 1) {
@@ -96,15 +96,17 @@ router.post("/login", async (req, res, next) => {
 });
 
 // For Deleting Admin Data
-router.delete("/:adminId", async (req, res, next) => {
+router.delete("/:adminId", checkAuth, async (req, res, next) => {
   const adminId = req.params.adminId;
 
   try {
-    await Admin.deleteOne({ _id: adminId }).exec();
+    const result = await Admin.findByIdAndDelete({ _id: adminId }).exec();
 
-    res.status(200).json({
-      message: "Admin Deleted",
-    });
+    if (result) {
+      res.status(200).json({ message: "Admin Deleted Successfully" });
+      return;
+    }
+    res.status(404).json({ message: "No such ID exist in Admin section" });
   } catch (error) {
     res.status(500).json({
       message: "Error from Admin Delete method",
