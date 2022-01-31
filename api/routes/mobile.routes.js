@@ -1,49 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const multer = require("multer");
 const fs = require("fs");
 
 const Mobile = require("../models/mobile.model");
-
-// To store any kind of files
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // null is for error
-    cb(null, "./uploads/");
-  },
-
-  filename: (req, file, cb) => {
-    // store current date-time as image name
-    cb(null, Date.now() + "_" + file.originalname.split(" ").join("_"));
-  },
-});
-const fileFilter = (req, file, cb) => {
-  console.log(file);
-  if (
-    file.mimetype == "image/jpg" ||
-    file.mimetype == "image/jpeg" ||
-    file.mimetype == "image/png"
-  ) {
-    // store file with this extension
-    cb(null, true);
-  }
-  {
-    // reject a file with different extension
-    cb(null, false);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1024 * 1024 * 5 },
-  // fileFilter: fileFilter,
-});
-
-var uploadMultiple = upload.array("image", 8);
+const uploadMultiplePic = require("../middleware/uploadImages");
 
 // For Posting Mobile Ad
-router.post("/", uploadMultiple, async (req, res, next) => {
+router.post("/", uploadMultiplePic, async (req, res, next) => {
   const mobile = new Mobile({
     _id: new mongoose.Types.ObjectId(),
     brand: req.body.brand,
@@ -75,7 +39,24 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      mobile: result,
+      mobile: result.map((doc) => {
+        return {
+          _id: doc._id,
+          brand: doc.brand,
+          price: doc.price,
+          adTitle: doc.adTitle,
+          description: doc.description,
+          images: doc.images,
+          request: {
+            type: "GET",
+            url: doc.images.map((image) => {
+              return {
+                url: "http://127.0.0.1:8000/" + image,
+              };
+            }),
+          },
+        };
+      }),
     };
     res.status(200).json(response);
   } catch (err) {
@@ -95,7 +76,25 @@ router.get("/:mobileId", async (req, res, next) => {
 
     // if the courseId donot exist then it return null which means 0 and 0 again means false
     if (result) {
-      res.status(200).json({ mobile: result });
+      const response = {
+        mobile: {
+          _id: result._id,
+          brand: result.brand,
+          price: result.price,
+          adTitle: result.adTitle,
+          description: result.description,
+          images: result.images,
+          request: {
+            type: "GET",
+            url: result.images.map((image) => {
+              return {
+                url: "http://127.0.0.1:8000/" + image,
+              };
+            }),
+          },
+        },
+      };
+      res.status(200).json(response);
       return;
     }
     res.status(404).json({ message: "No such ID exist in our Mobile" });

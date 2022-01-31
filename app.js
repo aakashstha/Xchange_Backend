@@ -4,7 +4,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const app = express();
+const cors = require("cors");
 
+const homeRoutes = require("./api/routes/home.routes");
 const adminRoutes = require("./api/routes/admin.routes");
 const mobileRoutes = require("./api/routes/mobile.routes");
 
@@ -22,16 +24,16 @@ mongoose.connect(URI, (err) => {
 app.use(express.json());
 // For logging incoming request in the Console.
 app.use(morgan("tiny"));
+// It makes folder publically available
+app.use("/uploads", express.static("uploads"));
+// For handling CORS (Cross-Origin Resource Sharing)
+// It must be done before reaching our routes which is down below
+app.use(cors());
 
 // My Xchange_Backend main routes
+app.use("/", homeRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mobiles", mobileRoutes);
-
-// Home route of this app
-app.get("/", (req, res, next) => {
-  //res.send(200);
-  res.send("Welcome fabulous people this is our main route!");
-});
 
 // Custom Error Handle Response
 // Here we are using app.use() because we do not know which HTTP method user might use.
