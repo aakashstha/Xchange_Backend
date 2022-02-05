@@ -23,7 +23,7 @@ const fileFilter = (req, file, cb) => {
   console.log(file);
   if (
     file.mimetype == "image/jpg" ||
-    file.mimetype == "image/jpeg" || 
+    file.mimetype == "image/jpeg" ||
     file.mimetype == "image/png"
   ) {
     // store file with this extension
