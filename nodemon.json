@@ -1,5 +1,9 @@
 {
   "env": {
-    "MONGO_DB_PW": "xchange"
+    "MONGO_DB_PW": "xchange",
+
+    "CLOUDINARY_NAME": "xchange01",
+    "CLOUDINARY_API_KEY": "336919667338265",
+    "CLOUDINARY_API_SECRET": "xda0qBdKMXe4rVmfapbyWu-eMM4"
   }
 }
