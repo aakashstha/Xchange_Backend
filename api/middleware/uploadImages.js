@@ -20,7 +20,7 @@ const storage = new CloudinaryStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  console.log(file);
+  //console.log(file);
   if (
     file.mimetype == "image/jpg" ||
     file.mimetype == "image/jpeg" ||
@@ -28,17 +28,17 @@ const fileFilter = (req, file, cb) => {
   ) {
     // store file with this extension
     cb(null, true);
-  }
-  {
+  } else {
     // reject a file with different extension
     cb(null, false);
+    return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
   }
 };
 
 const upload = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 5 },
-  //fileFilter: fileFilter,
+  fileFilter: fileFilter,
 });
 
 module.exports = upload.array("image", 8);

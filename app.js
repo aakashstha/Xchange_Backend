@@ -11,6 +11,7 @@ const adminRoutes = require("./api/routes/admin.routes");
 const mobileRoutes = require("./api/routes/mobile.routes");
 
 // For Database Connection
+("mongodb+srv://xchange:xchange@xchange.nrbdi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 const URI =
   "mongodb+srv://xchange:" +
   process.env.MONGO_DB_PW +
@@ -24,7 +25,7 @@ mongoose.connect(URI, (err) => {
 app.use(express.json());
 // For logging incoming request in the Console.
 app.use(morgan("tiny"));
-// It makes folder publically available
+// It makes uploads folder publically available
 app.use("/uploads", express.static("uploads"));
 // For handling CORS (Cross-Origin Resource Sharing)
 // It must be done before reaching our routes which is down below

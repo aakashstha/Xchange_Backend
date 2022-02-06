@@ -47,14 +47,6 @@ router.get("/", async (req, res, next) => {
           adTitle: doc.adTitle,
           description: doc.description,
           images: doc.images,
-          request: {
-            type: "GET",
-            url: doc.images.map((image) => {
-              return {
-                url: "http://127.0.0.1:8000/" + image,
-              };
-            }),
-          },
         };
       }),
     };
@@ -84,14 +76,6 @@ router.get("/:mobileId", async (req, res, next) => {
           adTitle: result.adTitle,
           description: result.description,
           images: result.images,
-          request: {
-            type: "GET",
-            url: result.images.map((image) => {
-              return {
-                url: "http://127.0.0.1:8000/" + image,
-              };
-            }),
-          },
         },
       };
       res.status(200).json(response);
