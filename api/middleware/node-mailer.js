@@ -1,4 +1,15 @@
 const nodemailer = require("nodemailer");
+const handlebars = require("handlebars");
+const fs = require("fs");
+const path = require("path");
+
+// using handlebars to send html based email
+const emailTemplateSource = fs.readFileSync(
+  path.join("api/views", "/template.hbs"),
+  "utf8"
+);
+const template = handlebars.compile(emailTemplateSource);
+const htmlToSend = template({ message: "Hello Aakash Shrestha!!" });
 
 module.exports = async () => {
   // Step 1
@@ -14,8 +25,8 @@ module.exports = async () => {
   let mailOptions = {
     from: process.env.GOOGLE_GMAIL,
     to: "aakash.1tha@gmail.com",
-    subject: "Nodemailer - Test from Aakash",
-    text: "Wooohooo it works!! from Aakash Shrestha",
+    subject: "Email confirmation link Test",
+    html: htmlToSend,
   };
 
   // Step 3
