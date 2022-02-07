@@ -9,7 +9,7 @@ const emailTemplateSource = fs.readFileSync(
   "utf8"
 );
 const template = handlebars.compile(emailTemplateSource);
-const htmlToSend = template({ message: "Hello Aakash Shrestha!!" });
+const htmlToSend = template({ message: "Aakash" });
 
 module.exports = async () => {
   // Step 1
@@ -25,7 +25,7 @@ module.exports = async () => {
   let mailOptions = {
     from: process.env.GOOGLE_GMAIL,
     to: "aakash.1tha@gmail.com",
-    subject: "Email confirmation link Test",
+    subject: "Welcome to Xchange! 👋 Please confirm your email address",
     html: htmlToSend,
   };
 
