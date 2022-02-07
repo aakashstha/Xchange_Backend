@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 
 const Mobile = require("../models/mobile.model");
-const uploadMultiplePic = require("../middleware/uploadImages");
+const uploadImages = require("../middleware/upload-images");
 
 // For Posting Mobile Ad
-router.post("/", uploadMultiplePic, async (req, res, next) => {
+router.post("/", uploadImages, async (req, res, next) => {
   const mobile = new Mobile({
     _id: new mongoose.Types.ObjectId(),
     brand: req.body.brand,

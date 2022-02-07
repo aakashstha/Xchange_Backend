@@ -4,6 +4,9 @@
 
     "CLOUDINARY_NAME": "xchange01",
     "CLOUDINARY_API_KEY": "336919667338265",
-    "CLOUDINARY_API_SECRET": "xda0qBdKMXe4rVmfapbyWu-eMM4"
+    "CLOUDINARY_API_SECRET": "xda0qBdKMXe4rVmfapbyWu-eMM4",
+
+    "GOOGLE_GMAIL": "aakash2tha@gmail.com",
+    "GOOGLE_PASSWORD": "aRx0gsFLTdW6"
   }
 }

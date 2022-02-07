@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 
 const Admin = require("../models/admin.model");
 const checkAuth = require("../middleware/check-auth");
+const nodeMailer = require("../middleware/node-mailer");
 
 // For Posting Admin SignUp Data
 router.post("/signup", async (req, res, next) => {
@@ -29,10 +30,14 @@ router.post("/signup", async (req, res, next) => {
         email: req.body.email,
         password: hash,
       });
-      await admin.save();
+      const savedResult = await admin.save();
+      if (savedResult) {
+        await nodeMailer();
+      }
 
       res.status(201).json({
         message: "Admin Created",
+        email: "Confirmation email sent",
       });
     });
   } catch (error) {
