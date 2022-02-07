@@ -43,11 +43,11 @@ var nodemailer = require("nodemailer");
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
 */
-var smtpTransport = nodemailer.createTransport("SMTP", {
-  service: "Gmail",
+var smtpTransport = nodemailer.createTransport({
+  service: "gmail",
   auth: {
-    user: "Your Gmail ID",
-    pass: "Gmail Password",
+    user: process.env.GOOGLE_GMAIL,
+    pass: process.env.GOOGLE_PASSWORD,
   },
 });
 var rand, mailOptions, host, link;
@@ -55,22 +55,23 @@ var rand, mailOptions, host, link;
 
 /*------------------Routing Started ------------------------*/
 
-app.get("/", function (req, res) {
-  res.sendfile("index.html");
-});
+// app.get("/", function (req, res) {
+//   res.sendfile("index.html");
+// });
 app.get("/send", function (req, res) {
   rand = Math.floor(Math.random() * 100 + 54);
-  host = req.get("host");
   link = "http://" + req.get("host") + "/verify?id=" + rand;
   mailOptions = {
-    to: req.query.to,
+    from: `Xchange ${process.env.GOOGLE_GMAIL}`,
+    subject: "Nice Nodemailer test",
+    to: "aakash.1tha@gmail.com",
     subject: "Please confirm your Email account",
     html:
       "Hello,<br> Please Click on the link to verify your email.<br><a href=" +
       link +
       ">Click here to verify</a>",
   };
-  console.log(mailOptions);
+
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
       console.log(error);
@@ -83,8 +84,9 @@ app.get("/send", function (req, res) {
 });
 
 app.get("/verify", function (req, res) {
+  console.log("Host!!!!!!" + host);
   console.log(req.protocol + ":/" + req.get("host"));
-  if (req.protocol + "://" + req.get("host") == "http://" + host) {
+  if (req.protocol + "://" + req.get("host") == "http://" + req.get("host")) {
     console.log("Domain is matched. Information is from Authentic email");
     if (req.query.id == rand) {
       console.log("email is verified");
