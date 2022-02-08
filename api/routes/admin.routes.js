@@ -32,7 +32,7 @@ router.post("/signup", async (req, res, next) => {
       });
       const savedResult = await admin.save();
       if (savedResult) {
-        await nodeMailer();
+        await nodeMailer.sendEmail(req, res);
       }
 
       res.status(201).json({

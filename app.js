@@ -1,4 +1,4 @@
-// This is kind of middleware
+// This is kind of middleware for the whole project
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -9,6 +9,8 @@ const cors = require("cors");
 const homeRoutes = require("./api/routes/home.routes");
 const adminRoutes = require("./api/routes/admin.routes");
 const mobileRoutes = require("./api/routes/mobile.routes");
+
+const nodemailer = require("./api/middleware/node-mailer");
 
 // For Database Connection
 ("mongodb+srv://xchange:xchange@xchange.nrbdi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
@@ -36,69 +38,8 @@ app.use("/", homeRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mobiles", mobileRoutes);
 
-// testing
-var nodemailer = require("nodemailer");
-
-/*
-    Here we are configuring our SMTP Server details.
-    STMP is mail server which is responsible for sending and recieving email.
-*/
-var smtpTransport = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GOOGLE_GMAIL,
-    pass: process.env.GOOGLE_PASSWORD,
-  },
-});
-var rand, mailOptions, host, link;
-/*------------------SMTP Over-----------------------------*/
-
-/*------------------Routing Started ------------------------*/
-
-// app.get("/", function (req, res) {
-//   res.sendfile("index.html");
-// });
-app.get("/send", function (req, res) {
-  rand = Math.floor(Math.random() * 100 + 54);
-  link = "http://" + req.get("host") + "/verify?id=" + rand;
-  mailOptions = {
-    from: `Xchange ${process.env.GOOGLE_GMAIL}`,
-    subject: "Nice Nodemailer test",
-    to: "aakash.1tha@gmail.com",
-    subject: "Please confirm your Email account",
-    html:
-      "Hello,<br> Please Click on the link to verify your email.<br><a href=" +
-      link +
-      ">Click here to verify</a>",
-  };
-
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    if (error) {
-      console.log(error);
-      res.end("error");
-    } else {
-      console.log("Message sent: " + response.message);
-      res.end("sent");
-    }
-  });
-});
-
-app.get("/verify", function (req, res) {
-  console.log("Host!!!!!!" + host);
-  console.log(req.protocol + ":/" + req.get("host"));
-  if (req.protocol + "://" + req.get("host") == "http://" + req.get("host")) {
-    console.log("Domain is matched. Information is from Authentic email");
-    if (req.query.id == rand) {
-      console.log("email is verified");
-      res.end("<h1>Email " + mailOptions.to + " is been Successfully verified");
-    } else {
-      console.log("email is not verified");
-      res.end("<h1>Bad Request</h1>");
-    }
-  } else {
-    res.end("<h1>Request is from unknown source");
-  }
-});
+// For Confirmation after email sent from Xchange
+app.get("/verify", nodemailer.confirmationLink);
 
 // Custom Error Handle Response
 // Here we are using app.use() because we do not know which HTTP method user might use.
