@@ -4,33 +4,39 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const Admin = require("../models/admin.model");
+const User = require("../models/user.model");
 const checkAuth = require("../middleware/check-auth");
 const nodeMailer = require("../middleware/node-mailer");
 
-// For Posting Admin SignUp Data
+// For Posting User SignUp Data
 router.post("/signup", async (req, res, next) => {
   try {
-    const result = await Admin.find({ email: req.body.email }).exec();
+    const result = await User.find({ email: req.body.email }).exec();
 
     if (result.length >= 1) {
       return res.status(409).json({
-        message: "Admin Already Exists",
+        message: "User Already Exists",
       });
     }
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
+      const token = jwt.sign({ email: req.body.email }, process.env.JWT_KEY, {
+        expiresIn: "24h",
+      });
+
       if (err) {
         return res.status(500).json({
-          message: "Error from Admin Post SignUp method 1",
+          message: "Error from User Post SignUp method 1",
           error: err,
         });
       }
-      const admin = new Admin({
+      const user = new User({
         _id: new mongoose.Types.ObjectId(),
+        fullName: req.body.fullName,
         email: req.body.email,
         password: hash,
+        confirmationCode: token,
       });
-      const savedResult = await admin.save();
+      const savedResult = await user.save();
 
       // To Send Email
       if (savedResult) {
@@ -38,32 +44,36 @@ router.post("/signup", async (req, res, next) => {
       }
 
       res.status(201).json({
-        message: "Admin Created",
+        message: "User Created",
       });
     });
   } catch (error) {
     res.status(500).json({
-      message: "Error from Admin Post SignUp method 2",
+      message: "Error from User Post SignUp method 2",
       error: err,
     });
   }
 });
 
-// For Posting Admin Login Data
+// For Posting User Login Data
 router.post("/login", async (req, res, next) => {
   try {
-    const admin_result = await Admin.find({ email: req.body.email }).exec();
+    const user_result = await User.find({ email: req.body.email }).exec();
 
-    if (admin_result.length < 1) {
+    if (user_result.length < 1) {
       return res.status(401).json({
         message: "Auth Failed",
       });
     }
 
-    // because find() method above return list of object so here we need to do admin[0].password
+    if (user_result[0].confirmed) {
+      console.log(user_result);
+    }
+
+    // because find() method above return list of object so here we need to do user[0].password
     bcrypt.compare(
       req.body.password,
-      admin_result[0].password,
+      user_result[0].password,
       (err, result) => {
         if (err) {
           return res.status(401).json({
@@ -74,8 +84,8 @@ router.post("/login", async (req, res, next) => {
           // JWT web token
           const token = jwt.sign(
             {
-              email: admin_result[0].email,
-              userId: admin_result[0]._id,
+              email: user_result[0].email,
+              userId: user_result[0]._id,
             },
             process.env.JWT_KEY,
             {
@@ -83,7 +93,7 @@ router.post("/login", async (req, res, next) => {
             }
           );
           return res.status(200).json({
-            id: admin_result[0]._id,
+            id: user_result[0]._id,
             message: "Auth successful",
             token: token,
           });
@@ -95,27 +105,27 @@ router.post("/login", async (req, res, next) => {
     );
   } catch (error) {
     res.status(500).json({
-      message: "Error from Admin Post LogIn method",
+      message: "Error from User Post LogIn method",
       error: error,
     });
   }
 });
 
-// For Deleting Admin Data
-router.delete("/:adminId", checkAuth, async (req, res, next) => {
-  const adminId = req.params.adminId;
+// For Deleting User Data
+router.delete("/:userId", checkAuth, async (req, res, next) => {
+  const userId = req.params.userId;
 
   try {
-    const result = await Admin.findByIdAndDelete({ _id: adminId }).exec();
+    const result = await User.findByIdAndDelete({ _id: userId }).exec();
 
     if (result) {
-      res.status(200).json({ message: "Admin Deleted Successfully" });
+      res.status(200).json({ message: "User Deleted Successfully" });
       return;
     }
-    res.status(404).json({ message: "No such ID exist in Admin section" });
+    res.status(404).json({ message: "No such ID exist in User section" });
   } catch (error) {
     res.status(500).json({
-      message: "Error from Admin Delete method",
+      message: "Error from User Delete method",
       error: error,
     });
   }

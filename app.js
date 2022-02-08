@@ -9,8 +9,10 @@ const cors = require("cors");
 const homeRoutes = require("./api/routes/home.routes");
 const adminRoutes = require("./api/routes/admin.routes");
 const mobileRoutes = require("./api/routes/mobile.routes");
+const userRoutes = require("./api/routes/user.routes");
 
 const nodemailer = require("./api/middleware/node-mailer");
+const User = require("./api/models/user.model");
 
 // For Database Connection
 ("mongodb+srv://xchange:xchange@xchange.nrbdi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
@@ -37,9 +39,10 @@ app.use(cors());
 app.use("/", homeRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mobiles", mobileRoutes);
+app.use("/user", userRoutes);
 
 // For Confirmation after email sent from Xchange
-app.get("/verify", nodemailer.confirmationLink);
+app.get("/confirmation/:token", nodemailer.finalSend);
 
 // Custom Error Handle Response
 // Here we are using app.use() because we do not know which HTTP method user might use.
