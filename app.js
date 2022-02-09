@@ -42,7 +42,7 @@ app.use("/mobiles", mobileRoutes);
 app.use("/user", userRoutes);
 
 // For Confirmation after email sent from Xchange
-app.get("/confirmation/:token", nodemailer.finalSend);
+app.get("/confirmation/:token", nodemailer.finalConfirm);
 
 // Custom Error Handle Response
 // Here we are using app.use() because we do not know which HTTP method user might use.
