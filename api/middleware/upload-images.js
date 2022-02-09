@@ -39,6 +39,19 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 5 },
   fileFilter: fileFilter,
-});
+}).array("image", 8);
 
-module.exports = upload.array("image", 8);
+// testing
+const deleteImage = () => {
+  cloudinary.uploader.destroy(
+    "DEV/1644422845086_IMG_0014.jpg",
+    function (err, result) {
+      if (err) {
+        console.log(error);
+      }
+      console.log(result);
+    }
+  );
+};
+
+module.exports = { upload, deleteImage };

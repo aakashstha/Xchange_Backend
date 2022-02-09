@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 
 const Mobile = require("../models/mobile.model");
-const uploadImages = require("../middleware/upload-images");
+const { upload, deleteImage } = require("../middleware/upload-images");
 
 // For Posting Mobile Ad
-router.post("/", uploadImages, async (req, res, next) => {
+router.post("/", upload, async (req, res, next) => {
   const mobile = new Mobile({
     _id: new mongoose.Types.ObjectId(),
     brand: req.body.brand,
@@ -119,7 +119,7 @@ router.put("/:mobileId", async (req, res, next) => {
 // For Deleting One Mobile Ad
 router.delete("/:mobileId", async (req, res, next) => {
   const mobileId = req.params.mobileId;
-
+  deleteImage();
   try {
     const result = await Mobile.findByIdAndDelete(mobileId).exec();
 
