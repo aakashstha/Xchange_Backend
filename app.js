@@ -18,7 +18,7 @@ const roomRoutes = require("./api/routes/products/room.routes");
 const serviceRoutes = require("./api/routes/products/service.routes");
 const bookRoutes = require("./api/routes/products/book.routes");
 const electronicRoutes = require("./api/routes/products/electronic.routes");
-const musical_InstrumentRoutes = require("./api/routes/products/musical_Instrument.routes");
+const musicInstrumentRoutes = require("./api/routes/products/musicInstrument.routes");
 
 const nodemailer = require("./api/middleware/node-mailer");
 
@@ -54,7 +54,7 @@ app.use("/cars", carRoutes);
 app.use("/services", serviceRoutes);
 app.use("/books", bookRoutes);
 app.use("/electronics", electronicRoutes);
-app.use("/musical_Instruments", musical_InstrumentRoutes);
+app.use("/musicInstruments", musicInstrumentRoutes);
 app.use("/bikes", bikeRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/rooms", roomRoutes);
@@ -62,6 +62,20 @@ app.use("/properties", propertyRoutes);
 
 // For Confirmation after email sent from Xchange
 app.get("/confirmation/:token", nodemailer.finalConfirm);
+
+// testing
+const cloudinary = require("cloudinary").v2;
+app.get("/imageDelete", () => {
+  cloudinary.uploader.destroy(
+    "DEV/1644421355976_IMG_0583.jpg",
+    function (err, result) {
+      if (err) {
+        console.log(error);
+      }
+      console.log(result);
+    }
+  );
+});
 
 // Custom Error Handle Response
 // Here we are using app.use() because we do not know which HTTP method user might use.

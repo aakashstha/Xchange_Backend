@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
-const { Musical_Instrument } = require("../../models/products.model");
+const { MusicInstrument } = require("../../models/products.model");
 const uploadImages = require("../../middleware/upload-images");
 
 // For Posting musical_Instrument Ad
 router.post("/", uploadImages, async (req, res, next) => {
-  const musical_Instrument = new Musical_Instrument({
+  const musical_Instrument = new MusicInstrument({
     _id: new mongoose.Types.ObjectId(),
     price: req.body.price,
     adTitle: req.body.adTitle,
@@ -32,7 +32,7 @@ router.post("/", uploadImages, async (req, res, next) => {
 // For Getting All musical_Instrument Ads
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Musical_Instrument.find().exec();
+    const result = await MusicInstrument.find().exec();
 
     const response = {
       count: result.length,
@@ -60,9 +60,7 @@ router.get("/:musical_InstrumentId", async (req, res, next) => {
   const musical_InstrumentId = req.params.musical_InstrumentId;
 
   try {
-    const result = await Musical_Instrument.findById(
-      musical_InstrumentId
-    ).exec();
+    const result = await MusicInstrument.findById(musical_InstrumentId).exec();
 
     // if the musical_InstrumentId donot exist then it return null which means 0 and 0 again means false
     if (result) {
@@ -99,7 +97,7 @@ router.put("/:musical_InstrumentId", uploadImages, async (req, res, next) => {
   };
 
   try {
-    const result = await Musical_Instrument.findByIdAndUpdate(
+    const result = await MusicInstrument.findByIdAndUpdate(
       musical_InstrumentId,
       {
         $set: updateOps,
@@ -129,7 +127,7 @@ router.delete("/:musical_InstrumentId", async (req, res, next) => {
   const musical_InstrumentId = req.params.musical_InstrumentId;
 
   try {
-    const result = await Musical_Instrument.findByIdAndDelete(
+    const result = await MusicInstrument.findByIdAndDelete(
       musical_InstrumentId
     ).exec();
 

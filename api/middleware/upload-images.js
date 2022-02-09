@@ -9,12 +9,13 @@ cloudinary.config({
 });
 
 // Saving on Cloud Info
-const storage = new CloudinaryStorage({
+const cloudStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "DEV",
     public_id: (req, file) => {
-      return Date.now() + "_" + file.originalname.split(" ").join("_");
+      return Date.now();
+      //+ "_" + file.originalname.split(" ").join("_");
     },
   },
 });
@@ -36,7 +37,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-  storage: storage,
+  storage: cloudStorage,
   limits: { fileSize: 1024 * 1024 * 5 },
   fileFilter: fileFilter,
 });

@@ -55,16 +55,16 @@ const electronicSchema = new mongoose.Schema({
 const Electronic = mongoose.model("Electronic", electronicSchema);
 
 // Musical_Instrument
-const musical_InstrumentSchema = new mongoose.Schema({
+const musicInstrumentSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
   images: { type: Array },
 });
-const Musical_Instrument = mongoose.model(
-  "Musical_Instrument",
-  musical_InstrumentSchema
+const MusicInstrument = mongoose.model(
+  "MusicInstrument",
+  musicInstrumentSchema
 );
 
 // Bike
@@ -129,8 +129,8 @@ module.exports = {
   Service,
   Book,
   Electronic,
-  Musical_Instrument,
-  Bike,
+  MusicInstrument,
+  Car,
   Job,
   Room,
   Property,
