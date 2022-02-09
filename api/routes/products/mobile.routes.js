@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const fs = require("fs");
 
-const Mobile = require("../models/mobile.model");
-const uploadImages = require("../middleware/upload-images");
+const { Mobile } = require("../../models/products.model");
+const uploadImages = require("../../middleware/upload-images");
 
 // For Posting Mobile Ad
 router.post("/", uploadImages, async (req, res, next) => {
@@ -19,7 +18,7 @@ router.post("/", uploadImages, async (req, res, next) => {
   //console.log(req);
 
   try {
-    const result = await mobile.save();
+    await mobile.save();
     res.status(201).json({
       message: "Mobile Ad Created Successfully",
       imagesArray: req.files.map((file) => file.path),
@@ -66,7 +65,7 @@ router.get("/:mobileId", async (req, res, next) => {
   try {
     const result = await Mobile.findById(mobileId).exec();
 
-    // if the courseId donot exist then it return null which means 0 and 0 again means false
+    // if the mogileId donot exist then it return null which means 0 and 0 again means false
     if (result) {
       const response = {
         mobile: {
@@ -91,7 +90,7 @@ router.get("/:mobileId", async (req, res, next) => {
 });
 
 // For Updating One Mobile Ad
-router.put("/:mobileId", async (req, res, next) => {
+router.put("/:mobileId", uploadImages, async (req, res, next) => {
   const mobileId = req.params.mobileId;
   const updateOps = {
     brand: req.body.brand,
@@ -101,13 +100,17 @@ router.put("/:mobileId", async (req, res, next) => {
   };
 
   try {
-    const result = await Mobile.updateOne(
-      { _id: mobileId },
-      { $set: updateOps }
-    ).exec();
-    res
-      .status(200)
-      .json({ message: "Mobile Ad Updated Successfully", newAd: updateOps });
+    const result = await Mobile.findByIdAndUpdate(mobileId, {
+      $set: updateOps,
+    }).exec();
+
+    if (result) {
+      res
+        .status(200)
+        .json({ message: "Mobile Ad Updated Successfully", newAd: updateOps });
+      return;
+    }
+    res.status(404).json({ message: "No such ID exist in our Mobile" });
   } catch (err) {
     res.status(500).json({
       message: "Error from Mobile Update method",

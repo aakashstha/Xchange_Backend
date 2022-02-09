@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema({
   password: { type: String, required: true },
   confirmed: { type: Boolean, default: false },
   confirmationCode: { type: String, unique: true },
+  dateCreated: { type: Date, default: Date.now() },
 });
 // match property above is basically buit in validation to validate email id = [ like if there is @ or not ]
 // which is built in Mongoose

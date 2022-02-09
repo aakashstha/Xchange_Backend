@@ -4,12 +4,10 @@ const fs = require("fs");
 const path = require("path");
 
 const User = require("../models/user.model");
-var myEmail;
 
 //
 // Send email to verify from nodemailer
 const email = async (req, res) => {
-  myEmail = req.body.email;
   const result = await User.find({ email: req.body.email }).exec();
 
   // using handlebars to send html based email
@@ -57,8 +55,8 @@ const email = async (req, res) => {
 //
 // For Confirmation after email sent from Xchange
 // used in app.use()
-const confirm = async (req, res) => {
-  const result = await User.find({ email: myEmail }).exec();
+const confirm = async (req, res, email) => {
+  const result = await User.find({ email: email }).exec();
 
   // After Email Sent
   const confirmSource = fs.readFileSync(
@@ -66,7 +64,7 @@ const confirm = async (req, res) => {
     "utf8"
   );
   const confirmHandlebars = handlebars.compile(confirmSource);
-  const htmlConfirm = confirmHandlebars({ email: result[0].email });
+  const htmlConfirm = confirmHandlebars({ email: email });
 
   if (result[0].confirmed) {
     res.send(htmlConfirm);
@@ -78,7 +76,7 @@ const confirm = async (req, res) => {
 //
 const finalConfirm = async (req, res) => {
   const result = await User.find({ confirmationCode: req.params.token });
-  //console.log("!!!!!!!!!! " + result[0]);
+  // console.log("!!!!!!!!!! " + result[0].email);
 
   try {
     if (result.length > 0) {
@@ -87,7 +85,7 @@ const finalConfirm = async (req, res) => {
         { $set: { confirmed: true } }
       ).exec();
     }
-    await confirm(req, res);
+    await confirm(req, res, result[0].email);
   } catch (err) {
     console.log("Error from confirmation Email " + err);
   }
