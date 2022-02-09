@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const { Electronic } = require("../../models/products.model");
-const uploadImages = require("../../middleware/upload-images");
+const { uploadImages, deleteImage } = require("../../middleware/upload-images");
 
 // For Posting electronic Ad
 router.post("/", uploadImages, async (req, res, next) => {
@@ -100,12 +100,10 @@ router.put("/:electronicId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
-      res
-        .status(200)
-        .json({
-          message: "electronic Ad Updated Successfully",
-          newAd: updateOps,
-        });
+      res.status(200).json({
+        message: "electronic Ad Updated Successfully",
+        newAd: updateOps,
+      });
       return;
     }
     res.status(404).json({ message: "No such ID exist in our electronic" });
@@ -120,6 +118,7 @@ router.put("/:electronicId", uploadImages, async (req, res, next) => {
 // For Deleting One electronic Ad
 router.delete("/:electronicId", async (req, res, next) => {
   const electronicId = req.params.electronicId;
+  deleteImage();
 
   try {
     const result = await Electronic.findByIdAndDelete(electronicId).exec();

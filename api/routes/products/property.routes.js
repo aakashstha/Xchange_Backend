@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const { Property } = require("../../models/products.model");
-const uploadImages = require("../../middleware/upload-images");
+const { uploadImages, deleteImage } = require("../../middleware/upload-images");
 
 // For Posting property Ad
 router.post("/", uploadImages, async (req, res, next) => {
@@ -146,6 +146,7 @@ router.put("/:propertyId", uploadImages, async (req, res, next) => {
 // For Deleting One property Ad
 router.delete("/:propertyId", async (req, res, next) => {
   const propertyId = req.params.propertyId;
+  deleteImage();
 
   try {
     const result = await Property.findByIdAndDelete(propertyId).exec();

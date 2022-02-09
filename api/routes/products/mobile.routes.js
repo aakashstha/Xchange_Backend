@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const { Mobile } = require("../../models/products.model");
-const uploadImages = require("../../middleware/upload-images");
+const { uploadImages, deleteImage } = require("../../middleware/upload-images");
 
 // For Posting Mobile Ad
 router.post("/", uploadImages, async (req, res, next) => {
@@ -122,11 +122,12 @@ router.put("/:mobileId", uploadImages, async (req, res, next) => {
 // For Deleting One Mobile Ad
 router.delete("/:mobileId", async (req, res, next) => {
   const mobileId = req.params.mobileId;
+  deleteImage();
 
   try {
     const result = await Mobile.findByIdAndDelete(mobileId).exec();
 
-    if (result) {
+    if (result) { 
       res.status(200).json({ message: "Mobile Ad Deleted Successfully" });
       return;
     }

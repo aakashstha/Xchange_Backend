@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const { MusicInstrument } = require("../../models/products.model");
-const uploadImages = require("../../middleware/upload-images");
+const { uploadImages, deleteImage } = require("../../middleware/upload-images");
 
 // For Posting musical_Instrument Ad
 router.post("/", uploadImages, async (req, res, next) => {
@@ -125,6 +125,7 @@ router.put("/:musical_InstrumentId", uploadImages, async (req, res, next) => {
 // For Deleting One musical_Instrument Ad
 router.delete("/:musical_InstrumentId", async (req, res, next) => {
   const musical_InstrumentId = req.params.musical_InstrumentId;
+  deleteImage();
 
   try {
     const result = await MusicInstrument.findByIdAndDelete(
