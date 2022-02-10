@@ -44,15 +44,12 @@ const uploadImages = multer({
 
 // testing
 const deleteImage = () => {
-  cloudinary.uploader.destroy(
-    "DEV/1644424260959",
-    function (err, result) {
-      if (err) {
-        console.log(error);
-      }
-      console.log(result);
+  cloudinary.uploader.destroy("DEV/1644424260959", function (err, result) {
+    if (err) {
+      console.log(error);
     }
-  );
+    console.log(result);
+  });
 };
 
 module.exports = { uploadImages, deleteImage };
