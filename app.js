@@ -40,7 +40,7 @@ app.use(express.json());
 // For logging incoming request in the Console.
 app.use(morgan("tiny"));
 // It makes uploads folder publically available
-app.use("/uploads", express.static("uploads"));
+//// app.use("/uploads", express.static("uploads"));
 // For handling CORS (Cross-Origin Resource Sharing)
 // It must be done before reaching our routes which is down below
 app.use(cors());
@@ -62,20 +62,6 @@ app.use("/properties", propertyRoutes);
 
 // For Confirmation after email sent from Xchange
 app.get("/confirmation/:token", nodemailer.finalConfirm);
-
-// testing
-const cloudinary = require("cloudinary").v2;
-app.get("/imageDelete", () => {
-  cloudinary.uploader.destroy(
-    "DEV/1644421355976_IMG_0583.jpg",
-    function (err, result) {
-      if (err) {
-        console.log(error);
-      }
-      console.log(result);
-    }
-  );
-});
 
 // Custom Error Handle Response
 // Here we are using app.use() because we do not know which HTTP method user might use.

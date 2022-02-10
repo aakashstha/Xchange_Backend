@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const { Book } = require("../../models/products.model");
-const { uploadImages, deleteImage } = require("../../middleware/upload-images");
+const { uploadImages, deleteImage } = require("../../middleware/handle-image");
 
 // For Posting Book Ad
 router.post("/", uploadImages, async (req, res, next) => {
