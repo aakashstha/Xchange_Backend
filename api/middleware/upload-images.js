@@ -42,13 +42,18 @@ const uploadImages = multer({
   fileFilter: fileFilter,
 }).array("image", 8);
 
-// testing
-const deleteImage = () => {
-  cloudinary.uploader.destroy("DEV/1644424260959", function (err, result) {
+// To delete Images from Cloudinary
+const deleteImage = async (imagesURL) => {
+  let allImage = [];
+  imagesURL.forEach((imagePath) => {
+    allImage.push(imagePath.substring(62, 79));
+  });
+
+  await cloudinary.api.delete_resources(allImage, function (err, result) {
     if (err) {
       console.log(error);
     }
-    console.log(result);
+    console.log("Image Deleted Successfully");
   });
 };
 

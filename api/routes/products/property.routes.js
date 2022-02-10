@@ -120,6 +120,7 @@ router.put("/:propertyId", uploadImages, async (req, res, next) => {
     facing: req.body.facing,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -128,6 +129,8 @@ router.put("/:propertyId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
+
       res.status(200).json({
         message: "property Ad Updated Successfully",
         newAd: updateOps,
@@ -146,12 +149,12 @@ router.put("/:propertyId", uploadImages, async (req, res, next) => {
 // For Deleting One property Ad
 router.delete("/:propertyId", async (req, res, next) => {
   const propertyId = req.params.propertyId;
-  deleteImage();
 
   try {
     const result = await Property.findByIdAndDelete(propertyId).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "property Ad Deleted Successfully" });
       return;
     }

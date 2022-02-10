@@ -104,6 +104,7 @@ router.put("/:carId", uploadImages, async (req, res, next) => {
     kmDriven: req.body.kmDriven,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -112,6 +113,7 @@ router.put("/:carId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "Car Ad Updated Successfully", newAd: updateOps });
@@ -129,12 +131,12 @@ router.put("/:carId", uploadImages, async (req, res, next) => {
 // For Deleting One Car Ad
 router.delete("/:carId", async (req, res, next) => {
   const carId = req.params.carId;
-  deleteImage();
 
   try {
     const result = await Car.findByIdAndDelete(carId).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "Car Ad Deleted Successfully" });
       return;
     }

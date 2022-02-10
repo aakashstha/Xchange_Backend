@@ -104,6 +104,7 @@ router.put("/:roomId", uploadImages, async (req, res, next) => {
     waterSupply: req.body.waterSupply,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -112,6 +113,7 @@ router.put("/:roomId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "room Ad Updated Successfully", newAd: updateOps });
@@ -129,12 +131,12 @@ router.put("/:roomId", uploadImages, async (req, res, next) => {
 // For Deleting One room Ad
 router.delete("/:roomId", async (req, res, next) => {
   const roomId = req.params.roomId;
-  deleteImage();
 
   try {
     const result = await Room.findByIdAndDelete(roomId).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "room Ad Deleted Successfully" });
       return;
     }

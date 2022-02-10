@@ -92,6 +92,7 @@ router.put("/:serviceId", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -100,6 +101,7 @@ router.put("/:serviceId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "Service Ad Updated Successfully", newAd: updateOps });
@@ -117,12 +119,12 @@ router.put("/:serviceId", uploadImages, async (req, res, next) => {
 // For Deleting One Service Ad
 router.delete("/:serviceId", async (req, res, next) => {
   const serviceId = req.params.serviceId;
-  deleteImage();
 
   try {
     const result = await Service.findByIdAndDelete(serviceId).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "Service Ad Deleted Successfully" });
       return;
     }

@@ -94,6 +94,7 @@ router.put("/:musical_InstrumentId", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -105,6 +106,7 @@ router.put("/:musical_InstrumentId", uploadImages, async (req, res, next) => {
     ).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({
         message: "musical_Instrument Ad Updated Successfully",
         newAd: updateOps,
@@ -125,7 +127,6 @@ router.put("/:musical_InstrumentId", uploadImages, async (req, res, next) => {
 // For Deleting One musical_Instrument Ad
 router.delete("/:musical_InstrumentId", async (req, res, next) => {
   const musical_InstrumentId = req.params.musical_InstrumentId;
-  deleteImage();
 
   try {
     const result = await MusicInstrument.findByIdAndDelete(
@@ -133,6 +134,7 @@ router.delete("/:musical_InstrumentId", async (req, res, next) => {
     ).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "musical_Instrument Ad Deleted Successfully" });

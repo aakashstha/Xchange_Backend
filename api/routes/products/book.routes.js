@@ -92,6 +92,7 @@ router.put("/:bookId", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -100,6 +101,7 @@ router.put("/:bookId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "book Ad Updated Successfully", newAd: updateOps });
@@ -123,6 +125,7 @@ router.delete("/:bookId", async (req, res, next) => {
     const result = await Book.findByIdAndDelete(bookId).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "book Ad Deleted Successfully" });
       return;
     }

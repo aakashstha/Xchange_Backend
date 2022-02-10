@@ -104,6 +104,7 @@ router.put("/:jobId", uploadImages, async (req, res, next) => {
     salaryTo: req.body.salaryTo,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -112,6 +113,7 @@ router.put("/:jobId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "job Ad Updated Successfully", newAd: updateOps });
@@ -129,12 +131,12 @@ router.put("/:jobId", uploadImages, async (req, res, next) => {
 // For Deleting One job Ad
 router.delete("/:jobId", async (req, res, next) => {
   const jobId = req.params.jobId;
-  deleteImage();
 
   try {
     const result = await Job.findByIdAndDelete(jobId).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "job Ad Deleted Successfully" });
       return;
     }

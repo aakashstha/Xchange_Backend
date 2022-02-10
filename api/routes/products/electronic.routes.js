@@ -92,6 +92,7 @@ router.put("/:electronicId", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -100,6 +101,7 @@ router.put("/:electronicId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({
         message: "electronic Ad Updated Successfully",
         newAd: updateOps,
@@ -118,12 +120,12 @@ router.put("/:electronicId", uploadImages, async (req, res, next) => {
 // For Deleting One electronic Ad
 router.delete("/:electronicId", async (req, res, next) => {
   const electronicId = req.params.electronicId;
-  deleteImage();
 
   try {
     const result = await Electronic.findByIdAndDelete(electronicId).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "electronic Ad Deleted Successfully" });
       return;
     }

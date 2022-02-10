@@ -97,6 +97,7 @@ router.put("/:mobileId", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    images: req.files.map((file) => file.path),
   };
 
   try {
@@ -105,6 +106,7 @@ router.put("/:mobileId", uploadImages, async (req, res, next) => {
     }).exec();
 
     if (result) {
+      await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "Mobile Ad Updated Successfully", newAd: updateOps });
@@ -122,12 +124,12 @@ router.put("/:mobileId", uploadImages, async (req, res, next) => {
 // For Deleting One Mobile Ad
 router.delete("/:mobileId", async (req, res, next) => {
   const mobileId = req.params.mobileId;
-  deleteImage();
 
   try {
     const result = await Mobile.findByIdAndDelete(mobileId).exec();
 
-    if (result) { 
+    if (result) {
+      await deleteImage(result.images);
       res.status(200).json({ message: "Mobile Ad Deleted Successfully" });
       return;
     }
