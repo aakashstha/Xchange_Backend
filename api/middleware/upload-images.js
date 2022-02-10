@@ -43,8 +43,8 @@ const upload = multer({
 
 // testing
 const deleteImage = () => {
-  cloudinary.uploader.destroy(
-    "DEV/1644422845086_IMG_0014.jpg",
+  cloudinary.api.delete_resources(
+    ["DEV/1644477524359_IMG_0583.jpg", "DEV/1644477520936_IMG_0014.jpg"],
     function (err, result) {
       if (err) {
         console.log(error);

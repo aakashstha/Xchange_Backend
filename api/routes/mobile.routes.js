@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const fs = require("fs");
 
-const Mobile = require("../models/mobile.model");
+const Mobile = require("../models/mobile.model"); 
 const { upload, deleteImage } = require("../middleware/upload-images");
 
 // For Posting Mobile Ad
