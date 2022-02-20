@@ -82,7 +82,7 @@ router.post("/login", async (req, res, next) => {
         }
         if (result) {
           // JWT web token
-          const token = jwt.sign(
+          const token = jwt.sign( 
             {
               email: user_result[0].email,
               userId: user_result[0]._id,

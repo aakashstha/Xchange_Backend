@@ -23,7 +23,6 @@ const musicInstrumentRoutes = require("./api/routes/products/musicInstrument.rou
 const nodemailer = require("./api/middleware/node-mailer");
 
 // For Database Connection
-
 ("mongodb+srv://xchange:xchange@xchange.nrbdi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 const URI =
   "mongodb+srv://xchange:" +
