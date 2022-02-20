@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // Mobile
 const mobileSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+  // _id: mongoose.Schema.Types.ObjectId,
   brand: { type: String, required: true },
   price: { type: Number, required: true },
   adTitle: { type: String, required: true },

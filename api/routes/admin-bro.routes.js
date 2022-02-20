@@ -1,12 +1,13 @@
-const AdminJS = require('adminjs')
-const AdminJSExpress = require('@adminjs/express')
+const AdminJS = require("adminjs");
+const AdminJSExpress = require("@adminjs/express");
+const AdminJSMongoose = require("@adminjs/mongoose");
+const mongoose = require("mongoose");
 
-const express = require('express')
-const app = express()
-
+AdminJS.registerAdapter(AdminJSMongoose);
 const adminJs = new AdminJS({
-  databases: [],
-  rootPath: '/admin',
-})
+  databases: [mongoose],
+  rootPath: "/adminBro",
+});
+const router = AdminJSExpress.buildRouter(adminJs);
 
-const router = AdminJSExpress.buildRouter(adminJs)
+module.exports = router;

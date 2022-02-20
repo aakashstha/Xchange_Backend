@@ -8,7 +8,7 @@ const { uploadImages, deleteImage } = require("../../middleware/handle-image");
 // For Posting Mobile Ad
 router.post("/", uploadImages, async (req, res, next) => {
   const mobile = new Mobile({
-    _id: new mongoose.Types.ObjectId(),
+   // _id: new mongoose.Types.ObjectId(),
     brand: req.body.brand,
     price: req.body.price,
     adTitle: req.body.adTitle,
