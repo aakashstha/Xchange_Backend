@@ -3,13 +3,37 @@ const AdminJSExpress = require("@adminjs/express");
 const AdminJSMongoose = require("@adminjs/mongoose");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
-const { Mobile } = require("../models/products.model");
 const Admin = require("../models/admin.model");
+const {
+  Mobile,
+  Car,
+  Service,
+  Book,
+  Electronic,
+  MusicInstrument,
+  Bike,
+  Job,
+  Room,
+  Property,
+} = require("../models/products.model");
+const User = require("../models/user.model");
 
 AdminJS.registerAdapter(AdminJSMongoose);
 const adminJs = new AdminJS({
-  databases: [mongoose],
+  //databases: [mongoose],
+  resources: [
+    User,
+    Mobile,
+    Car,
+    Service,
+    Book,
+    Electronic,
+    MusicInstrument,
+    Bike,
+    Job,
+    Room,
+    Property,
+  ],
   rootPath: "/admin",
 });
 

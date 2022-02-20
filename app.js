@@ -19,7 +19,7 @@ const serviceRoutes = require("./api/routes/products/service.routes");
 const bookRoutes = require("./api/routes/products/book.routes");
 const electronicRoutes = require("./api/routes/products/electronic.routes");
 const musicInstrumentRoutes = require("./api/routes/products/musicInstrument.routes");
-const adminBroRoutes = require("./api/routes/admin-bro.routes");
+const adminBroRoutes = require("./api/routes/adminPanel.routes");
 
 const nodemailer = require("./api/middleware/node-mailer");
 
