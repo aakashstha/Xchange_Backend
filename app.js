@@ -48,7 +48,7 @@ app.use(cors());
 
 // My Xchange_Backend main routes
 app.use("/", homeRoutes);
-app.use("/admin", adminRoutes);
+//app.use("/admin1", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/mobiles", mobileRoutes);
 app.use("/cars", carRoutes);
@@ -60,7 +60,8 @@ app.use("/bikes", bikeRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/rooms", roomRoutes);
 app.use("/properties", propertyRoutes);
-app.use("/adminBro", adminBroRoutes);
+// Admin Panel route
+app.use("/admin", adminBroRoutes);
 
 // For Confirmation after email sent from Xchange
 app.get("/confirmation/:token", nodemailer.finalConfirm);
