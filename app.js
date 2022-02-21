@@ -45,6 +45,16 @@ app.use(morgan("tiny"));
 // For handling CORS (Cross-Origin Resource Sharing)
 // It must be done before reaching our routes which is down below
 app.use(cors());
+var session = require("express-session");
+//app.set("trust proxy", 1); // trust first proxy
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: true },
+  })
+);
 
 // My Xchange_Backend main routes
 app.use("/", homeRoutes);

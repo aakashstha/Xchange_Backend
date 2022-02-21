@@ -1,7 +1,7 @@
 const AdminJS = require("adminjs");
 const AdminJSExpress = require("@adminjs/express");
 const AdminJSMongoose = require("@adminjs/mongoose");
-const mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const Admin = require("../models/admin.model");
 const {
@@ -43,10 +43,13 @@ const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
   authenticate: async (email, password) => {
     try {
       const result = await Admin.find({ email: email }).exec();
+      console.log(result);
       // if password match return true
       const resultPassword = await bcrypt.compare(password, result[0].password);
+      console.log(resultPassword);
 
       if (email === result[0].email && resultPassword) {
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return { email: result[0].email };
       } else {
         console.log("Wrong email and/or password");
