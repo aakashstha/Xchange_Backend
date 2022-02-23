@@ -118,13 +118,13 @@ router.put("/:bookId", uploadImages, async (req, res, next) => {
 // For Deleting One book Ad
 router.delete("/:bookId", async (req, res, next) => {
   const bookId = req.params.bookId;
-  deleteImage();
 
   try {
     const result = await Book.findByIdAndDelete(bookId).exec();
 
     if (result) {
       await deleteImage(result.images);
+
       res.status(200).json({ message: "book Ad Deleted Successfully" });
       return;
     }

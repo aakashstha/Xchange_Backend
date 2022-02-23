@@ -44,17 +44,22 @@ const uploadImages = multer({
 
 // To delete Images from Cloudinary
 const deleteImage = async (imagesURL) => {
-  let allImage = [];
-  imagesURL.forEach((imagePath) => {
-    allImage.push(imagePath.substring(62, 79));
-  });
+  //console.log("!!!!!!!!!!!!!!!!! " + imagesURL);
+  if (imagesURL.length > 0) {
+    let allImage = [];
+    imagesURL.forEach((imagePath) => {
+      allImage.push(imagePath.substring(62, 79));
+    });
 
-  await cloudinary.api.delete_resources(allImage, function (err, result) {
-    if (err) {
-      console.log(error);
-    }
-    console.log("Image Deleted Successfully");
-  });
+    await cloudinary.api.delete_resources(allImage, function (err, result) {
+      if (err) {
+        console.log("Error from Image Delete ", err);
+      }
+      console.log("Image Deleted Successfully");
+    });
+  } else {
+    console.log("No Image to Delete");
+  }
 };
 
 module.exports = { uploadImages, deleteImage };
