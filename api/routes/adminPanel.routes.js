@@ -4,7 +4,7 @@ const AdminJSMongoose = require("@adminjs/mongoose");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-// const { Mobile } = require("../models/products.model");
+const { User } = require("../models/user.model");
 const Admin = require("../models/admin.model");
 
 AdminJS.registerAdapter(AdminJSMongoose);
