@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
     HTTP: "200 OK",
     type: "GET",
     request: {
+      AdminPanel: `${url}/admin`,
       Mobiles: `${url}/mobiles`,
       Bikes: `${url}/bikes`,
       Cars: `${url}/cars`,
