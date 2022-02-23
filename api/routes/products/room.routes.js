@@ -8,7 +8,6 @@ const { uploadImages, deleteImage } = require("../../middleware/handle-image");
 // For Posting room Ad
 router.post("/", uploadImages, async (req, res, next) => {
   const room = new Room({
-    _id: new mongoose.Types.ObjectId(),
     totalRooms: req.body.totalRooms,
     kitchen: req.body.kitchen,
     toilet: req.body.toilet,

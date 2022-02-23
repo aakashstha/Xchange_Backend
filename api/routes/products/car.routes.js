@@ -8,7 +8,6 @@ const { uploadImages, deleteImage } = require("../../middleware/handle-image");
 // For Posting Car Ad
 router.post("/", uploadImages, async (req, res, next) => {
   const car = new Car({
-    _id: new mongoose.Types.ObjectId(),
     brand: req.body.brand,
     price: req.body.price,
     fuel: req.body.fuel,

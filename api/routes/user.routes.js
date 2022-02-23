@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); 
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.model");
 const checkAuth = require("../middleware/check-auth");
@@ -24,13 +24,12 @@ router.post("/signup", async (req, res, next) => {
       });
 
       if (err) {
-        return res.status(500).json({ 
+        return res.status(500).json({
           message: "Error from User Post SignUp method 1",
           error: err,
         });
       }
       const user = new User({
-        _id: new mongoose.Types.ObjectId(),
         fullName: req.body.fullName,
         email: req.body.email,
         password: hash,

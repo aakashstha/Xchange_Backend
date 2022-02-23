@@ -26,7 +26,6 @@ router.post("/signup", async (req, res, next) => {
         });
       }
       const admin = new Admin({
-        _id: new mongoose.Types.ObjectId(),
         email: req.body.email,
         password: hash,
       });

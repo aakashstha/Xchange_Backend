@@ -8,7 +8,6 @@ const { uploadImages, deleteImage } = require("../../middleware/handle-image");
 // For Posting musical_Instrument Ad
 router.post("/", uploadImages, async (req, res, next) => {
   const musical_Instrument = new MusicInstrument({
-    _id: new mongoose.Types.ObjectId(),
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
