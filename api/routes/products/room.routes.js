@@ -12,8 +12,10 @@ router.post("/", uploadImages, async (req, res, next) => {
     kitchen: req.body.kitchen,
     toilet: req.body.toilet,
     waterSupply: req.body.waterSupply,
+    price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   });
 
@@ -38,15 +40,18 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      room: result.map((doc) => {
+      rooms: result.map((doc) => {
         return {
           _id: doc._id,
           totalRooms: doc.totalRooms,
           kitchen: doc.kitchen,
           toilet: doc.toilet,
           waterSupply: doc.waterSupply,
+          price: doc.price,
           adTitle: doc.adTitle,
           description: doc.description,
+          location: doc.location,
+          date: doc.date,
           images: doc.images,
         };
       }),
@@ -69,15 +74,18 @@ router.get("/:roomId", async (req, res, next) => {
 
     // if the roomId donot exist then it return null which means 0 and 0 again means false
     if (result) {
-      const response = {
-        room: {
+      const response = { 
+        rooms: {
           _id: result._id,
           totalRooms: result.totalRooms,
           kitchen: result.kitchen,
           toilet: result.toilet,
           waterSupply: result.waterSupply,
+          price: result.price,
           adTitle: result.adTitle,
           description: result.description,
+          location: result.location,
+          date: result.date,
           images: result.images,
         },
       };
@@ -101,8 +109,10 @@ router.put("/:roomId", uploadImages, async (req, res, next) => {
     kitchen: req.body.kitchen,
     toilet: req.body.toilet,
     waterSupply: req.body.waterSupply,
+    price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   };
 

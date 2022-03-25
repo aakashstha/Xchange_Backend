@@ -10,10 +10,11 @@ router.post("/", uploadImages, async (req, res, next) => {
   const car = new Car({
     brand: req.body.brand,
     price: req.body.price,
-    fuel: req.body.fuel,
+    year: req.body.year,
     kmDriven: req.body.kmDriven,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   });
 
@@ -38,15 +39,17 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      car: result.map((doc) => {
+      cars: result.map((doc) => {
         return {
           _id: doc._id,
           brand: doc.brand,
           price: doc.price,
-          fuel: doc.fuel,
+          year: doc.year,
           kmDriven: doc.kmDriven,
           adTitle: doc.adTitle,
           description: doc.description,
+          location: doc.location,
+          date: doc.date,
           images: doc.images,
         };
       }),
@@ -70,14 +73,17 @@ router.get("/:carId", async (req, res, next) => {
     // if the carId donot exist then it return null which means 0 and 0 again means false
     if (result) {
       const response = {
-        car: {
+        cars: {
           _id: result._id,
           brand: result.brand,
           price: result.price,
           fuel: result.fuel,
+          year: result.year,
           kmDriven: result.kmDriven,
           adTitle: result.adTitle,
           description: result.description,
+          location: result.location,
+          date: result.date,
           images: result.images,
         },
       };
@@ -99,10 +105,11 @@ router.put("/:carId", uploadImages, async (req, res, next) => {
   const updateOps = {
     brand: req.body.brand,
     price: req.body.price,
-    fuel: req.body.fuel,
+    year: req.body.year,
     kmDriven: req.body.kmDriven,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   };
 

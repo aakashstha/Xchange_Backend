@@ -16,8 +16,10 @@ router.post("/", uploadImages, async (req, res, next) => {
     totalFloors: req.body.totalFloors,
     area: req.body.area,
     facing: req.body.facing,
+    price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   });
 
@@ -42,7 +44,7 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      property: result.map((doc) => {
+      properties: result.map((doc) => {
         return {
           _id: doc._id,
           type: doc.type,
@@ -53,8 +55,11 @@ router.get("/", async (req, res, next) => {
           totalFloors: doc.totalFloors,
           area: doc.area,
           facing: doc.facing,
+          price: doc.price,
           adTitle: doc.adTitle,
           description: doc.description,
+          location: doc.location,
+          date: doc.date,
           images: doc.images,
         };
       }),
@@ -78,7 +83,7 @@ router.get("/:propertyId", async (req, res, next) => {
     // if the propertyId donot exist then it return null which means 0 and 0 again means false
     if (result) {
       const response = {
-        property: {
+        properties: {
           _id: result._id,
           type: result.type,
           bedrooms: result.bedrooms,
@@ -86,10 +91,13 @@ router.get("/:propertyId", async (req, res, next) => {
           furnishing: result.furnishing,
           listedBy: result.listedBy,
           totalFloors: result.totalFloors,
-          area: result.area,
+          area: result.area, 
           facing: result.facing,
+          price: result.price,
           adTitle: result.adTitle,
           description: result.description,
+          location: result.location,
+          date: result.date,
           images: result.images,
         },
       };
@@ -117,8 +125,10 @@ router.put("/:propertyId", uploadImages, async (req, res, next) => {
     totalFloors: req.body.totalFloors,
     area: req.body.area,
     facing: req.body.facing,
+    price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   };
 

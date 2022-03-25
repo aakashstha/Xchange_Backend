@@ -11,6 +11,7 @@ router.post("/", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   });
 
@@ -35,12 +36,14 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      service: result.map((doc) => {
+      services: result.map((doc) => {
         return {
           _id: doc._id,
           price: doc.price,
           adTitle: doc.adTitle,
           description: doc.description,
+          location: doc.location,
+          date: doc.date,
           images: doc.images,
         };
       }),
@@ -64,11 +67,13 @@ router.get("/:serviceId", async (req, res, next) => {
     // if the serviceId donot exist then it return null which means 0 and 0 again means false
     if (result) {
       const response = {
-        service: {
+        services: {
           _id: result._id,
           price: result.price,
           adTitle: result.adTitle,
           description: result.description,
+          location: result.location,
+          date: result.date,
           images: result.images,
         },
       };
@@ -91,6 +96,7 @@ router.put("/:serviceId", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   };
 

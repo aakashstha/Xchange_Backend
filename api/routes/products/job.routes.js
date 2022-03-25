@@ -12,8 +12,10 @@ router.post("/", uploadImages, async (req, res, next) => {
     positionType: req.body.positionType,
     salaryFrom: req.body.salaryFrom,
     salaryTo: req.body.salaryTo,
+    price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   });
 
@@ -38,15 +40,18 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      job: result.map((doc) => {
+      jobs: result.map((doc) => {
         return {
           _id: doc._id,
           salaryPeriod: doc.salaryPeriod,
           positionType: doc.positionType,
           salaryFrom: doc.salaryFrom,
           salaryTo: doc.salaryTo,
+          price: doc.price,
           adTitle: doc.adTitle,
           description: doc.description,
+          location: doc.location,
+          date: doc.date,
           images: doc.images,
         };
       }),
@@ -70,14 +75,17 @@ router.get("/:jobId", async (req, res, next) => {
     // if the jobId donot exist then it return null which means 0 and 0 again means false
     if (result) {
       const response = {
-        job: {
+        jobs: {
           _id: result._id,
           salaryPeriod: result.salaryPeriod,
           positionType: result.positionType,
           salaryFrom: result.salaryFrom,
           salaryTo: result.salaryTo,
+          price: result.price,
           adTitle: result.adTitle,
           description: result.description,
+          location: result.location,
+          date: result.date,
           images: result.images,
         },
       };
@@ -89,7 +97,7 @@ router.get("/:jobId", async (req, res, next) => {
     res.status(500).json({
       message: "Error from job Get One method",
       error: err,
-    });
+    }); 
   }
 });
 
@@ -101,8 +109,10 @@ router.put("/:jobId", uploadImages, async (req, res, next) => {
     positionType: req.body.positionType,
     salaryFrom: req.body.salaryFrom,
     salaryTo: req.body.salaryTo,
+    price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   };
 

@@ -14,6 +14,7 @@ router.post("/", uploadImages, async (req, res, next) => {
     kmDriven: req.body.kmDriven,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   });
 
@@ -38,7 +39,7 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      bike: result.map((doc) => {
+      bikes: result.map((doc) => {
         return {
           _id: doc._id,
           brand: doc.brand,
@@ -47,6 +48,8 @@ router.get("/", async (req, res, next) => {
           kmDriven: doc.kmDriven,
           adTitle: doc.adTitle,
           description: doc.description,
+          location: doc.location,
+          date: doc.date,
           images: doc.images,
         };
       }),
@@ -70,7 +73,7 @@ router.get("/:bikeId", async (req, res, next) => {
     // if the bikeId donot exist then it return null which means 0 and 0 again means false
     if (result) {
       const response = {
-        bike: {
+        bikes: {
           _id: result._id,
           brand: result.brand,
           price: result.price,
@@ -78,6 +81,8 @@ router.get("/:bikeId", async (req, res, next) => {
           kmDriven: result.kmDriven,
           adTitle: result.adTitle,
           description: result.description,
+          location: result.location,
+          date: result.date,
           images: result.images,
         },
       };
@@ -103,6 +108,7 @@ router.put("/:bikeId", uploadImages, async (req, res, next) => {
     kmDriven: req.body.kmDriven,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   };
 

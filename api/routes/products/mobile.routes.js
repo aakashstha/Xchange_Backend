@@ -12,6 +12,7 @@ router.post("/", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   });
   //console.log(req);
@@ -37,13 +38,15 @@ router.get("/", async (req, res, next) => {
 
     const response = {
       count: result.length,
-      mobile: result.map((doc) => {
+      mobiles: result.map((doc) => {
         return {
           _id: doc._id,
           brand: doc.brand,
           price: doc.price,
           adTitle: doc.adTitle,
           description: doc.description,
+          location: doc.location,
+          date: doc.date,
           images: doc.images,
         };
       }),
@@ -67,12 +70,14 @@ router.get("/:mobileId", async (req, res, next) => {
     // if the mogileId donot exist then it return null which means 0 and 0 again means false
     if (result) {
       const response = {
-        mobile: {
+        mobiles: {
           _id: result._id,
           brand: result.brand,
           price: result.price,
           adTitle: result.adTitle,
           description: result.description,
+          location: result.location,
+          date: result.date,
           images: result.images,
         },
       };
@@ -96,6 +101,7 @@ router.put("/:mobileId", uploadImages, async (req, res, next) => {
     price: req.body.price,
     adTitle: req.body.adTitle,
     description: req.body.description,
+    location: req.body.location,
     images: req.files.map((file) => file.path),
   };
 

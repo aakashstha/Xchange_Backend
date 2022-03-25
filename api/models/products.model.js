@@ -1,11 +1,19 @@
 const mongoose = require("mongoose");
 
+// var date = new Date();
+// var year = date.getFullYear();
+// var month = date.getMonth();
+// var day = date.getDay();
+// var currentDate = year + "/" + month + "/" + day;
+
 // Mobile
 const mobileSchema = new mongoose.Schema({
   brand: { type: String, required: true },
   price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Mobile = mongoose.model("Mobile", mobileSchema);
@@ -14,10 +22,12 @@ const Mobile = mongoose.model("Mobile", mobileSchema);
 const carSchema = new mongoose.Schema({
   brand: { type: String, required: true },
   price: { type: Number, required: true },
-  fuel: { type: String, required: true },
+  year: { type: String, required: true },
   kmDriven: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Car = mongoose.model("Car", carSchema);
@@ -27,6 +37,8 @@ const serviceSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Service = mongoose.model("Service", serviceSchema);
@@ -36,6 +48,8 @@ const bookSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Book = mongoose.model("Book", bookSchema);
@@ -45,6 +59,8 @@ const electronicSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Electronic = mongoose.model("Electronic", electronicSchema);
@@ -54,6 +70,8 @@ const musicInstrumentSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const MusicInstrument = mongoose.model(
@@ -69,6 +87,8 @@ const bikeSchema = new mongoose.Schema({
   kmDriven: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Bike = mongoose.model("Bike", bikeSchema);
@@ -79,8 +99,11 @@ const jobSchema = new mongoose.Schema({
   positionType: { type: String, required: true },
   salaryFrom: { type: String, required: true },
   salaryTo: { type: String, required: true },
+  price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Job = mongoose.model("Job", jobSchema);
@@ -91,8 +114,11 @@ const roomSchema = new mongoose.Schema({
   kitchen: { type: String, required: true },
   toilet: { type: String, required: true },
   waterSupply: { type: String, required: true },
+  price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Room = mongoose.model("Room", roomSchema);
@@ -107,8 +133,11 @@ const propertySchema = new mongoose.Schema({
   totalFloors: { type: String, required: true },
   area: { type: String, required: true },
   facing: { type: String, required: true },
+  price: { type: Number, required: true },
   adTitle: { type: String, required: true },
   description: { type: String, required: true },
+  location: { type: String, required: true },
+  date: { type: Date, default: Date.now() },
   images: { type: Array },
 });
 const Property = mongoose.model("Property", propertySchema);
