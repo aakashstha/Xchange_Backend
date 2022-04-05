@@ -25,11 +25,13 @@ const router = AdminJSExpress.buildAuthenticatedRouter(
           password,
           result[0].password
         );
+        console.log(result);
+        console.log(resultPassword);
 
         if (email === result[0].email && resultPassword) {
           return { email: result[0].email };
         } else {
-          console.log("Wrong email and/or password");
+          console.log("Wrong email and/or password!!");
         }
         return null;
       } catch (error) {

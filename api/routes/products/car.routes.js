@@ -7,6 +7,8 @@ const { uploadImages, deleteImage } = require("../../middleware/handle-image");
 
 // For Posting Car Ad
 router.post("/", uploadImages, async (req, res, next) => {
+  console.log(req);
+  return;
   const car = new Car({
     brand: req.body.brand,
     price: req.body.price,
@@ -22,7 +24,7 @@ router.post("/", uploadImages, async (req, res, next) => {
     await car.save();
     res.status(201).json({
       message: "Car Ad Created Successfully",
-      imagesArray: req.files.map((file) => file.path),
+      // imagesArray: req.files.map((file) => file.path),
     });
   } catch (err) {
     res.status(500).json({

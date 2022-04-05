@@ -21,19 +21,19 @@ const cloudStorage = new CloudinaryStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  //console.log(file);
-  if (
-    file.mimetype == "image/jpg" ||
-    file.mimetype == "image/jpeg" ||
-    file.mimetype == "image/png"
-  ) {
-    // store file with this extension
-    cb(null, true);
-  } else {
-    // reject a file with different extension
-    cb(null, false);
-    return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
-  }
+  // console.log(file);
+  // if (
+  //   file.mimetype == "image/jpg" ||
+  //   file.mimetype == "image/jpeg" ||
+  //   file.mimetype == "image/png"
+  // ) {
+  // store file with this extension
+  cb(null, true);
+  // } else {
+  //   // reject a file with different extension
+  //   cb(null, false);
+  //   return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
+  // }
 };
 
 const uploadImages = multer({
