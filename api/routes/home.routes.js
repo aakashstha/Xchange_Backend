@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-url = "http://localhost:8000";
+mainURL = "http://localhost:8000/";
+productURL = "http://localhost:8000/products/categorical/";
 
 // Each app.use(middleware) is called everytime a request is sent to the server
 router.get("/", (req, res) => {
@@ -10,17 +11,19 @@ router.get("/", (req, res) => {
     HTTP: "200 OK",
     type: "GET",
     request: {
-      AdminPanel: `${url}/admin`,
-      Mobiles: `${url}/mobiles`,
-      Bikes: `${url}/bikes`,
-      Cars: `${url}/cars`,
-      Electronics: `${url}/electronics`,
-      Jobs: `${url}/jobs`,
-      MusicInstruments: `${url}/musicInstruments`,
-      Properties: `${url}/properties`,
-      Rooms: `${url}/rooms`,
-      Services: `${url}/services`,
-      Books: `${url}/books`,
+      AdminPanel: `${mainURL}admin`,
+      "All Products": `${mainURL}products`,
+      "Product Category": "↓↓",
+      Cars: `${productURL}cars`,
+      Bikes: `${productURL}bikes`,
+      Mobiles: `${productURL}mobiles`,
+      Electronics: `${productURL}electronics`,
+      Jobs: `${productURL}jobs`,
+      MusicInstruments: `${productURL}musicInstruments`,
+      Properties: `${productURL}properties`,
+      Rooms: `${productURL}rooms`,
+      Services: `${productURL}services`,
+      Books: `${productURL}books`,
     },
   });
 });
