@@ -336,4 +336,66 @@ router.get("/categorical/:category", async (req, res, next) => {
   }
 });
 
+// For Getting user specific Ad
+router.get("/user/:userEmail", async (req, res, next) => {
+  const userEmail = req.params.userEmail;
+
+  try {
+    const result = await Product.find({ user: userEmail }).exec();
+    // console.log(result[0]["category"]);
+    var name = "name";
+
+    const response = {
+      count: result.length,
+      products: result.map((doc) => {
+        return {
+          // car, bike, mobile, book, service, electronic, musicInstruments
+          _id: doc._id,
+          brand: doc.brand,
+          price: doc.price,
+          year: doc.year,
+          kmDriven: doc.kmDriven,
+          adTitle: doc.adTitle,
+          description: doc.description,
+          date: doc.date,
+          location: doc.location,
+
+          // job
+          salaryPeriod: doc.salaryPeriod,
+          positionType: doc.positionType,
+          salaryFrom: doc.salaryFrom,
+          salaryTo: doc.salaryTo,
+
+          // room
+          totalRooms: doc.totalRooms,
+          kitchen: doc.kitchen,
+          toilet: doc.toilet,
+          waterSupply: doc.waterSupply,
+
+          // property
+          type: doc.type,
+          bedrooms: doc.bedrooms,
+          bathrooms: doc.bathrooms,
+          furnishing: doc.furnishing,
+          listedBy: doc.listedBy,
+          totalFloors: doc.totalFloors,
+          area: doc.area,
+          facing: doc.facing,
+          images: doc.images,
+
+          // must have field
+          category: doc.category,
+          user: doc.user,
+        };
+      }),
+    };
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({
+      message: "Error from product Get User specific All method",
+      error: err,
+    });
+  }
+});
+
 module.exports = router;
