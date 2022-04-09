@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema({
   // must have field
   date: { type: Date, default: Date.now() },
   category: { type: String, required: true },
-  user: { type: String },
+  userId: { type: String },
 });
 const Product = mongoose.model("Product", productSchema);
 

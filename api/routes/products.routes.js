@@ -42,7 +42,7 @@ router.post("/", uploadImages, async (req, res, next) => {
 
     // must have field
     category: req.body.category,
-    user: req.body.user,
+    userId: req.body.userId,
   });
 
   try {
@@ -104,7 +104,7 @@ router.get("/", async (req, res, next) => {
 
           // must have field
           category: doc.category,
-          user: doc.user,
+          userId: doc.userId,
         };
       }),
     };
@@ -164,7 +164,7 @@ router.get("/:productId", async (req, res, next) => {
 
           // must have field
           category: result.category,
-          user: result.user,
+          userId: result.userId,
         },
       };
       res.status(200).json(response);
@@ -217,7 +217,7 @@ router.put("/:productId", uploadImages, async (req, res, next) => {
 
     // must have field
     category: req.body.category,
-    user: req.body.user,
+    userId: req.body.userId,
   };
 
   try {
@@ -323,7 +323,7 @@ router.get("/categorical/:category", async (req, res, next) => {
 
           // must have field
           category: doc.category,
-          user: doc.user,
+          userId: doc.userId,
         };
       }),
     };
@@ -337,11 +337,11 @@ router.get("/categorical/:category", async (req, res, next) => {
 });
 
 // For Getting user specific Ad
-router.get("/user/:userEmail", async (req, res, next) => {
-  const userEmail = req.params.userEmail;
+router.get("/user/:userId", async (req, res, next) => {
+  const userId = req.params.userId;
 
   try {
-    const result = await Product.find({ user: userEmail }).exec();
+    const result = await Product.find({ userId: userId }).exec();
     // console.log(result[0]["category"]);
     var name = "name";
 
@@ -385,7 +385,7 @@ router.get("/user/:userEmail", async (req, res, next) => {
 
           // must have field
           category: doc.category,
-          user: doc.user,
+          userId: doc.userId,
         };
       }),
     };

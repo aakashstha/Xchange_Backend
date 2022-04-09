@@ -11,11 +11,24 @@ const nodeMailer = require("../middleware/node-mailer");
 // For Posting User SignUp Data
 router.post("/signup", async (req, res, next) => {
   try {
-    const result = await User.find({ email: req.body.email }).exec();
+    // Get user input
+    const { fullName, email, password } = req.body;
 
-    if (result.length >= 1) {
+    // Validate user input
+    if (!(fullName && email && password)) {
+      res
+        .status(400)
+        .send("All input is required like fullName, email and password");
+    }
+
+    // check if user already exist
+    // Validate if user exist in our database
+    const oldUser = await User.find({ email: req.body.email }).exec();
+    // console.log(oldUser);
+
+    if (oldUser.length >= 1) {
       return res.status(409).json({
-        message: "User Already Exists",
+        message: "User Already Exists. Please Login",
       });
     }
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
@@ -95,8 +108,10 @@ router.post("/login", async (req, res, next) => {
             }
           );
           return res.status(200).json({
-            id: user_result[0]._id,
             message: "Auth successful",
+            id: user_result[0]._id,
+            email: user_result[0].email,
+            confirm: user_result[0].confirmed,
             token: token,
           });
         }
@@ -134,12 +149,11 @@ router.delete("/:userId", checkAuth, async (req, res, next) => {
 });
 
 // For Getting One User Data
-router.get("/:email", async (req, res, next) => {
-  const email = req.params.email;
+router.get("/:userId", async (req, res, next) => {
+  const userId = req.params.userId;
 
   try {
-    const result = await User.findOne({ email: email }).exec();
-    // console.log(result);
+    const result = await User.findOne({ _id: userId }).exec();
 
     // if the userId donot exist then it return null which means 0 and 0 again means false
     if (result) {
@@ -162,6 +176,51 @@ router.get("/:email", async (req, res, next) => {
   } catch (err) {
     res.status(500).json({
       message: "Error from User Get One method",
+      error: err,
+    });
+  }
+});
+
+// For Updating User Password
+router.put("/change_password", async (req, res, next) => {
+  try {
+    const userId = req.body.userId;
+
+    const user_result = await User.findById(userId).exec();
+
+    var passwordMatched = await bcrypt.compare(
+      req.body.oldPassword,
+      user_result["password"]
+    );
+
+    if (passwordMatched) {
+      bcrypt.hash(req.body.newPassword, 10, async (err, hash) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Error from User Change Password method 1",
+            error: err,
+          });
+        }
+
+        const updateOps = {
+          password: hash,
+        };
+        const result = await User.findByIdAndUpdate(userId, {
+          $set: updateOps,
+        }).exec();
+
+        if (result) {
+          res.status(200).json({ message: "password Changed successfully" });
+          return;
+        }
+        res.status(404).json({ message: "No such ID exist in our User" });
+      });
+    } else {
+      res.status(401).json({ message: "Your old password did not mactched" });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "Error from User Change password",
       error: err,
     });
   }
@@ -192,52 +251,6 @@ router.put("/:userId", async (req, res, next) => {
       return;
     }
     res.status(404).json({ message: "No such ID exist in our User" });
-  } catch (err) {
-    res.status(500).json({
-      message: "Error from User Update method",
-      error: err,
-    });
-  }
-});
-
-// For Updating User Password
-router.put("/change_password/:userId", async (req, res, next) => {
-  try {
-    const userId = req.params.userId;
-
-    const user_result = await User.findById(userId).exec();
-    // console.log(user_result["password"]);
-
-    var passwordMatched = await bcrypt.compare(
-      req.body.oldPassword,
-      user_result["password"]
-    );
-
-    if (passwordMatched) {
-      bcrypt.hash(req.body.newPassword, 10, async (err, hash) => {
-        if (err) {
-          return res.status(500).json({
-            message: "Error from User Change Password method 1",
-            error: err,
-          });
-        }
-
-        const updateOps = {
-          password: hash,
-        };
-        const result = await User.findByIdAndUpdate(userId, {
-          $set: updateOps,
-        }).exec();
-
-        if (result) {
-          res.status(200).json({ message: "password Changed successfully" });
-          return;
-        }
-        res.status(404).json({ message: "No such ID exist in our User" });
-      });
-    } else {
-      res.status(404).json({ message: "Your old password did not mactched" });
-    }
   } catch (err) {
     res.status(500).json({
       message: "Error from User Update method",
