@@ -226,13 +226,43 @@ router.put("/change_password", async (req, res, next) => {
   }
 });
 
+// For Updating User email
+router.put("/change_email", async (req, res, next) => {
+  const userId = req.body.userId;
+
+  const updateOps = {
+    email: req.body.email,
+  };
+
+  try {
+    const result = await User.findByIdAndUpdate(userId, {
+      $set: updateOps,
+    }).exec();
+
+    if (result) {
+      // To Send Email
+      await nodeMailer.email(req, res);
+
+      res
+        .status(200)
+        .json({ message: "User Email Updated Successfully", user: updateOps });
+      return;
+    }
+    res.status(404).json({ message: "No such ID exist in our User" });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error from User Update Email method",
+      error: err,
+    });
+  }
+});
+
 // For Updating One User Data
 router.put("/:userId", async (req, res, next) => {
   const userId = req.params.userId;
   const updateOps = {
     email: req.body.email,
     fullName: req.body.fullName,
-    email: req.body.email,
     dob: req.body.dob,
     bio: req.body.bio,
     website: req.body.website,
@@ -244,7 +274,6 @@ router.put("/:userId", async (req, res, next) => {
     }).exec();
 
     if (result) {
-      // await deleteImage(result.images);
       res
         .status(200)
         .json({ message: "User Updated Successfully", user: updateOps });
