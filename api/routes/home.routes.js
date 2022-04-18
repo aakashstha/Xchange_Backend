@@ -24,6 +24,8 @@ router.get("/", (req, res) => {
       Rooms: `${productURL}rooms`,
       Services: `${productURL}services`,
       Books: `${productURL}books`,
+      // "Recommendation": "↓↓",
+      // Products: `${mainURL}products/recommendation/python`,
     },
   });
 });

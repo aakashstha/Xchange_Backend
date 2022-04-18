@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const fetch = require("node-fetch");
 
 const { Product } = require("../models/products.model");
 const { uploadImages, deleteImage } = require("../middleware/handle-image");
@@ -393,6 +394,51 @@ router.get("/user/:userId", async (req, res, next) => {
   } catch (err) {
     res.status(500).json({
       message: "Error from product Get User specific All method",
+      error: err,
+    });
+  }
+});
+
+/*
+
+
+
+
+
+
+
+
+
+ */
+
+// For Getting Recommendation from Python
+router.post("/recommendation/python", async (req, res, next) => {
+  console.log(req.body.adTitle);
+
+  try {
+    var response = await fetch("http://127.0.0.1:8001/predict/Ntorq2");
+    const result = await response.json();
+    console.log(result.id);
+
+    // for getting data from mongodb after recommendation provide by python module
+    const findProduct = await Product.find({
+      _id: {
+        $in: [
+          result.id[0],
+          result.id[1],
+          // mongoose.Types.ObjectId(result.id[0]),
+        ],
+      },
+    }).exec();
+    // console.log(findProduct);
+
+    res.status(200).json({
+      message: "Recommendation from Python",
+      recommendedProduct: findProduct,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error from product Get Recommendation method",
       error: err,
     });
   }
