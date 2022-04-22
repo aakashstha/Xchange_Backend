@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.model");
+const { Product } = require("../models/products.model");
 const checkAuth = require("../middleware/check-auth");
 const nodeMailer = require("../middleware/node-mailer");
 
@@ -134,9 +135,13 @@ router.delete("/:userId", checkAuth, async (req, res, next) => {
 
   try {
     const result = await User.findByIdAndDelete({ _id: userId }).exec();
+    const result1 = await Product.deleteMany({ userId: userId }).exec();
+    // console.log(result1);
 
     if (result) {
-      res.status(200).json({ message: "User Deleted Successfully" });
+      res
+        .status(200)
+        .json({ message: "User Deleted Successfully and all his product" });
       return;
     }
     res.status(404).json({ message: "No such ID exist in User section" });

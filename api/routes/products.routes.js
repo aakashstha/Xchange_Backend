@@ -426,6 +426,8 @@ router.post("/recommendation/python", async (req, res, next) => {
         $in: [
           result.id[0],
           result.id[1],
+          result.id[2],
+          result.id[3],
           // mongoose.Types.ObjectId(result.id[0]),
         ],
       },
@@ -438,7 +440,32 @@ router.post("/recommendation/python", async (req, res, next) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Error from product Get Recommendation method",
+      message: "Error from product Post Recommendation method",
+      error: err,
+    });
+  }
+});
+
+// For Getting Recommendation from Python
+router.get("/search/:key", async (req, res, next) => {
+  const key = req.params.key;
+
+  try {
+    const result = await Product.find({
+      $or: [
+        { adTitle: { $regex: key, $options: "i" } },
+        { brand: { $regex: key, $options: "i" } },
+        { description: { $regex: key, $options: "i" } },
+      ],
+    }).exec();
+
+    res.status(200).json({
+      count: result.length,
+      result: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error from searching ",
       error: err,
     });
   }

@@ -5,11 +5,11 @@ const productSchema = new mongoose.Schema({
   // car, bike, mobile, book, service, electronic, musicInstruments
   brand: { type: String },
   price: { type: Number },
-  year: { type: String },
-  kmDriven: { type: Number },
   adTitle: { type: String },
   description: { type: String },
   location: { type: String },
+  year: { type: String },
+  kmDriven: { type: Number },
 
   // job
   salaryPeriod: { type: String },
@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema({
   // must have field
   date: { type: Date, default: Date.now() },
   category: { type: String, required: true },
-  userId: { type: String },
+  userId: { type: String, required: true },
 });
 const Product = mongoose.model("Product", productSchema);
 
