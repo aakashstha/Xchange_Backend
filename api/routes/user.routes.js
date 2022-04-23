@@ -49,6 +49,7 @@ router.post("/signup", async (req, res, next) => {
         dob: req.body.dob,
         bio: req.body.bio,
         website: req.body.website,
+        gender: req.body.gender,
         password: hash,
         confirmationCode: token,
       });
@@ -112,6 +113,7 @@ router.post("/login", async (req, res, next) => {
             message: "Auth successful",
             id: user_result[0]._id,
             email: user_result[0].email,
+            gender: user_result[0].gender,
             confirm: user_result[0].confirmed,
             token: token,
           });
@@ -170,6 +172,7 @@ router.get("/:userId", async (req, res, next) => {
         dob: result.dob,
         bio: result.bio,
         website: result.website,
+        gender: result.gender,
         confirmed: result.confirmed,
         confirmationCode: result.confirmationCode,
         dateCreated: result.dateCreated,
@@ -231,12 +234,57 @@ router.put("/change_password", async (req, res, next) => {
   }
 });
 
+// For Resetting User Password
+router.put("/reset_password", async (req, res, next) => {
+  try {
+    const email = req.body.email;
+    const user_result = await User.find({ email: email }).exec();
+    console.log(user_result);
+
+    if (user_result.length >= 1) {
+      bcrypt.hash(req.body.password, 10, async (err, hash) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Error from User Reset Password method 1",
+            error: err,
+          });
+        }
+
+        const updateOps = {
+          password: hash,
+          confirmed: false,
+        };
+        const result = await User.findByIdAndUpdate(user_result[0]._id, {
+          $set: updateOps,
+        }).exec();
+
+        if (result) {
+          // To Send Email
+          await nodeMailer.email(req, res);
+
+          res.status(200).json({ message: "password Reset successfully" });
+          return;
+        }
+        res.status(404).json({ message: "No such ID exist in our User" });
+      });
+    } else {
+      res.status(401).json({ message: "NO any result" });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "Error from User Reset password",
+      error: err,
+    });
+  }
+});
+
 // For Updating User email
 router.put("/change_email", async (req, res, next) => {
   const userId = req.body.userId;
 
   const updateOps = {
     email: req.body.email,
+    confirmed: false,
   };
 
   try {
@@ -266,10 +314,10 @@ router.put("/change_email", async (req, res, next) => {
 router.put("/:userId", async (req, res, next) => {
   const userId = req.params.userId;
   const updateOps = {
-    email: req.body.email,
     fullName: req.body.fullName,
     dob: req.body.dob,
     bio: req.body.bio,
+    gender: req.body.gender,
     website: req.body.website,
   };
 

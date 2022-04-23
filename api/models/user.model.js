@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema({
   dob: { type: String, default: "" },
   bio: { type: String, default: "" },
   website: { type: String, default: "" },
+  gender: { type: String, default: "" },
   confirmed: { type: Boolean, default: false },
   confirmationCode: { type: String, unique: true },
   dateCreated: { type: Date, default: Date.now() },
