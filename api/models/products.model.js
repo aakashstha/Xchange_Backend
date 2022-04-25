@@ -32,7 +32,7 @@ const productSchema = new mongoose.Schema({
   totalFloors: { type: String },
   area: { type: String },
   facing: { type: String },
-  images: { type: Array },
+  images: { type: Array }, 
 
   // must have field
   date: { type: Date, default: Date.now() },

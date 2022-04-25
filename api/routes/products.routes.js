@@ -413,10 +413,12 @@ router.get("/user/:userId", async (req, res, next) => {
 
 // For Getting Recommendation from Python
 router.post("/recommendation/python", async (req, res, next) => {
-  console.log(req.body.adTitle);
+  console.log(req.body.adId);
 
   try {
-    var response = await fetch("http://127.0.0.1:8001/predict/Ntorq2");
+    var response = await fetch(
+      "http://127.0.0.1:8001/predict/" + req.body.adId
+    );
     const result = await response.json();
     console.log(result.id);
 
@@ -432,10 +434,18 @@ router.post("/recommendation/python", async (req, res, next) => {
         ],
       },
     }).exec();
-    // console.log(findProduct);
+    console.log(findProduct[0].adTitle);
+    console.log(findProduct[1].adTitle);
+    console.log(findProduct[2].adTitle);
+    console.log(findProduct[3].adTitle);
+
+    // for (let index = 0; index < result.id.length; index++) {
+    //   console.log(findProduct[index].adTitle);
+    // }
 
     res.status(200).json({
       message: "Recommendation from Python",
+      count: findProduct.length,
       recommendedProduct: findProduct,
     });
   } catch (err) {
