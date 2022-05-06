@@ -75,7 +75,7 @@ module.exports = app;
 //   .then((client) => {
 //     console.log("DB Connected!");
 
-//     const fileName = "services.csv";
+//     const fileName = "./data/musicInstruments.csv";
 //     var arrayToInsert = [];
 //     csvtojson()
 //       .fromFile(fileName)
@@ -84,6 +84,8 @@ module.exports = app;
 //         // source.length
 //         for (var i = 0; i < source.length; i++) {
 //           var date = new Date(source[i]["date"]);
+//           var images = source[i]["images"];
+//           var imagesData = [images];
 
 //           var oneRow = {
 //             // book, musicInstruments, services
@@ -94,7 +96,7 @@ module.exports = app;
 //             category: source[i]["category"],
 //             userId: source[i]["userId"],
 //             date: date.toISOString(),
-//             images: [],
+//             images: imagesData,
 //             _id: mongoose.Types.ObjectId(source[i]["_id"]),
 //             // // mobile,
 //             // brand: source[i]["brand"],
