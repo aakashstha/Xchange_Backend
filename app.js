@@ -75,7 +75,7 @@ module.exports = app;
 //   .then((client) => {
 //     console.log("DB Connected!");
 
-//     const fileName = "./data/musicInstruments.csv";
+//     const fileName = "./data/mobiles.csv";
 //     var arrayToInsert = [];
 //     csvtojson()
 //       .fromFile(fileName)
@@ -98,8 +98,8 @@ module.exports = app;
 //             date: date.toISOString(),
 //             images: imagesData,
 //             _id: mongoose.Types.ObjectId(source[i]["_id"]),
-//             // // mobile,
-//             // brand: source[i]["brand"],
+//             // mobile,
+//             brand: source[i]["brand"],
 //           };
 //           arrayToInsert.push(oneRow);
 //         } //inserting into the table "employees"
