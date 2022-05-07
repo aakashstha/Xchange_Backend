@@ -51,7 +51,7 @@ const email = async (req, res) => {
     return console.log("Email sent!!!");
   });
 };
-
+ 
 //
 // For Confirmation after email sent from Xchange
 // used in app.use()
